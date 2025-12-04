@@ -780,4 +780,18 @@ textarea {
   .fab-text {
     display: none;
   }
+  calendar-header-content {
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px; 
+}
+
+@media (max-width: 960px) {
+  .calendar-header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+}
 }
