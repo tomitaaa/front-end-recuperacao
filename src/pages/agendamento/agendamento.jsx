@@ -543,6 +543,7 @@ function Agendamento() {
                     onClick={() => changeView("listMonth")}
                   />
                 </div>
+<<<<<<< HEAD
                 <div className="calendar-header-content">
                   <div className="p-input-icon-right search-field">
                     <InputText
@@ -553,6 +554,14 @@ function Agendamento() {
                     />
                     <i className="pi pi-search" />
                   </div>
+=======
+                <div className="search-input-wrapper">
+                  <InputText
+                    placeholder="Buscar agendamento, cliente ou observação..."
+                    className="p-inputtext-sm search-input"
+                  />
+                  <i className="pi pi-search search-icon" />
+>>>>>>> 38467482136102119247bbfc52de16bb1fcb603e
                 </div>
               </div>
 

@@ -1,9 +1,9 @@
 body {
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
   min-height: 100vh;
   margin: 0;
   padding: 0;
-  background: #BFBACD;
+  background: #bfbacd;
   box-sizing: border-box;
 }
 
@@ -285,7 +285,8 @@ button:hover {
 }
 
 /* Corrigir os estilos do modal e popup para garantir que apareçam corretamente */
-.modal, .popup {
+.modal,
+.popup {
   position: fixed;
   top: 0;
   left: 0;
@@ -299,7 +300,8 @@ button:hover {
 }
 
 /* Garantir que o conteúdo do modal seja visível */
-.modal-content, .popup-content {
+.modal-content,
+.popup-content {
   background: #fff;
   padding: 20px;
   border-radius: 8px;
@@ -343,8 +345,6 @@ textarea {
   opacity: 1;
 }
 
-
-
 /* Estilos gerais do container do calendário */
 .advanced-calendar-container {
   display: flex;
@@ -358,13 +358,11 @@ textarea {
   flex: 1;
 }
 
-
 .calendar-layout {
   display: flex;
   height: 100%;
   gap: 20px;
 }
-
 
 .calendar-sidebar {
   width: 250px;
@@ -659,10 +657,10 @@ textarea {
 
 .floating-action-button {
   position: fixed !important;
-  bottom: 80px !important; 
+  bottom: 80px !important;
   right: 30px !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
-  z-index: 1001 !important; 
+  z-index: 1001 !important;
   transition: all 0.3s ease !important;
 }
 
@@ -671,10 +669,9 @@ textarea {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3) !important;
 }
 
-
 .floating-action-button {
   position: fixed !important;
-  bottom: 80px !important; 
+  bottom: 80px !important;
   right: 30px !important;
   z-index: 1001 !important;
   padding: 1rem !important;
@@ -708,28 +705,27 @@ textarea {
   width: 100%;
 }
 
-
 @media (max-width: 960px) {
   .calendar-layout {
     flex-direction: column;
   }
-  
+
   .calendar-sidebar {
     width: 100%;
     flex-direction: row;
     flex-wrap: wrap;
   }
-  
+
   .calendar-sidebar-section {
     flex: 1;
     min-width: 200px;
   }
-  
+
   .floating-action-button {
     bottom: 80px !important;
     right: 20px !important;
   }
-  
+
   .floating-action-button .p-button-label {
     display: none !important;
   }
@@ -740,29 +736,29 @@ textarea {
     flex-direction: column;
     gap: 8px;
   }
-  
+
   .calendar-modal {
     width: 95%;
   }
-  
+
   .view-button {
     padding: 6px 12px;
     font-size: 0.9rem;
   }
-  
+
   .fc .fc-toolbar {
     flex-direction: column;
     gap: 12px;
   }
-  
+
   .calendar-sidebar {
     flex-direction: column;
   }
-  
+
   .calendar-sidebar-section {
     width: 100%;
   }
-  
+
   .calendar-view-options {
     flex-wrap: wrap;
   }
@@ -772,26 +768,12 @@ textarea {
     overflow: hidden;
     padding: 0;
   }
-  
+
   .fab-icon {
     margin-right: 0;
   }
-  
+
   .fab-text {
     display: none;
   }
-  calendar-header-content {
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 20px; 
-}
-
-@media (max-width: 960px) {
-  .calendar-header-content {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-}
 }
