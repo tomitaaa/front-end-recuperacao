@@ -42,6 +42,7 @@ function Agendamento() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNewEvent, setIsNewEvent] = useState(false);
   const [selectedClientId, setSelectedClientId] = useState(null);
+  const [searchText, setSearchText] = useState("");
   const [clients, setClients] = useState([]);
   const [agendamentos, setAgendamentos] = useState([]);
   const [tiposServico, setTiposServico] = useState([]);
@@ -304,6 +305,24 @@ function Agendamento() {
 
   const formattedEvents = formatarEventosComDuracao(agendamentos);
 
+  // Filtrar eventos baseado no texto de busca
+  const filteredEvents =
+    searchText.trim() === ""
+      ? formattedEvents
+      : formattedEvents.filter((event) => {
+          const searchLower = searchText.toLowerCase();
+          const cliente = clients.find((c) => c.id === event.extendedProps.clienteId);
+          const clienteNome = cliente?.nome || "";
+          const titulo = event.title || "";
+          const descricao = event.extendedProps.descricao || "";
+
+          return (
+            clienteNome.toLowerCase().includes(searchLower) ||
+            titulo.toLowerCase().includes(searchLower) ||
+            descricao.toLowerCase().includes(searchLower)
+          );
+        });
+
   const handleEventCreate = (newEvent) => {
     try {
       // Usar a API para adicionar o agendamento
@@ -525,12 +544,14 @@ function Agendamento() {
                   />
                 </div>
                 <div className="calendar-header-content">
-                  <div className="p-input-icon-left search-field">
-                    <i className="pi pi-search" />
+                  <div className="p-input-icon-right search-field">
                     <InputText
                       placeholder="Buscar agendamento, cliente ou observação..."
                       className="p-inputtext-sm"
+                      value={searchText}
+                      onChange={(e) => setSearchText(e.target.value)}
                     />
+                    <i className="pi pi-search" />
                   </div>
                 </div>
               </div>
@@ -552,7 +573,7 @@ function Agendamento() {
                     right: "",
                   }}
                   themeSystem="bootstrap5"
-                  events={formattedEvents}
+                  events={filteredEvents}
                   editable={true}
                   selectable={true}
                   selectMirror={true}
