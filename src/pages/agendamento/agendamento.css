@@ -497,6 +497,47 @@ textarea {
   align-items: center;
   z-index: 1000;
 }
+.fc .fc-event.evento-duplicado,
+.fc-event.evento-duplicado {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.fc-event.evento-duplicado .fc-event-main,
+.fc-event.evento-duplicado .fc-event-title,
+.fc-event.evento-duplicado .fc-event-time {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+.fc-event.evento-duplicado::before {
+  content: '' !important;
+}
+
+/* Estilos para renderer customizado de evento (dot + título) */
+.fc-event-custom {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fc-event-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  flex: 0 0 auto;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.05) inset;
+}
+
+.fc-event-title-text {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
 
 .calendar-modal {
   background-color: white;
