@@ -10,6 +10,7 @@ import {
   TIPOS_SERVICO,
   formatarEventosComDuracao,
 } from "../../utils/calendarConfig";
+import SeletorCliente from "../../components/SeletorCliente/SeletorCliente";
 import {
   clientesApi,
   agendamentosApi,
@@ -616,6 +617,17 @@ function Agendamento() {
   return (
     <div className="agendamento-page">
       <Toast ref={toast} position="bottom-right" />
+
+      <div style={{ display: "none" }}>
+        <SeletorCliente
+          ref={clienteSelectorRef}
+          selectedClientId={selectedClientId}
+          onClientSelect={setSelectedClientId}
+          onClientCreated={(novoCliente) => {
+            carregarDados();
+          }}
+        />
+      </div>
 
       <header className="calendar-header">
         <div className="calendar-header-content">
