@@ -361,6 +361,7 @@ function Agendamento() {
     });
   })();
 
+
   const handleEventCreate = (newEvent) => {
     try {
       const agendamentoCriado = agendamentosApi.add(newEvent);
@@ -635,6 +636,9 @@ function Agendamento() {
                   ref={clienteSelectorRef}
                   selectedClientId={selectedClientId}
                   onClientSelect={setSelectedClientId}
+                  onClientCreated={(novoCliente) => {
+                    carregarDados();
+                  }}
                 />
               </Card>
 
@@ -935,6 +939,7 @@ function Agendamento() {
                       clienteSelectorRef.current.abrirModal();
                     }
                   }}
+                  style={{ width: "100%" }}
                 />
               )}
             </div>
