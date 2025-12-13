@@ -45,6 +45,7 @@ function Agendamento() {
   const [clients, setClients] = useState([]);
   const [agendamentos, setAgendamentos] = useState([]);
   const [tiposServico, setTiposServico] = useState([]);
+  const [searchText, setSearchText] = useState("");
   const [confirmDialogVisible, setConfirmDialogVisible] = useState(false);
   const [eventIdToDelete, setEventIdToDelete] = useState(null);
   const [eventForm, setEventForm] = useState({
@@ -338,6 +339,27 @@ function Agendamento() {
   };
 
   const formattedEvents = formatarEventosComDuracao(agendamentos);
+
+  const filteredEvents = (() => {
+    const q = (searchText || "").trim().toLowerCase();
+    if (!q) return formattedEvents;
+
+    return formattedEvents.filter((ev) => {
+      const cliente = clients.find((c) => c.id === ev.extendedProps.clienteId);
+      const tipoServicoId = ev.extendedProps?.tipoServicoId;
+      const tipoServico = tiposServico.find((s) => s.id === tipoServicoId);
+      const tipoNome =
+        tipoServico?.nome || ev.extendedProps?.tipoServico?.title || "";
+      return (
+        (cliente && cliente.nome && cliente.nome.toLowerCase().includes(q)) ||
+        (ev.title && ev.title.toLowerCase().includes(q)) ||
+        (ev.extendedProps &&
+          ev.extendedProps.descricao &&
+          ev.extendedProps.descricao.toLowerCase().includes(q)) ||
+        (tipoNome && tipoNome.toLowerCase().includes(q))
+      );
+    });
+  })();
 
   const handleEventCreate = (newEvent) => {
     try {
@@ -682,55 +704,96 @@ function Agendamento() {
                     onClick={() => changeView("listMonth")}
                   />
                 </div>
+                <div className="calendar-header-content">
+                  <div className="search-field">
+                    <InputText
+                      placeholder="Buscar agendamento, cliente ou observação..."
+                      className="p-inputtext-sm"
+                      value={searchText}
+                      onChange={(e) => setSearchText(e.target.value)}
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="calendar-main">
-                <FullCalendar
-                  ref={calendarRef}
-                  plugins={[
-                    dayGridPlugin,
-                    timeGridPlugin,
-                    interactionPlugin,
-                    bootstrap5Plugin,
-                    listPlugin,
-                  ]}
-                  initialView="dayGridMonth"
-                  headerToolbar={{
-                    left: "prev,next today",
-                    center: "title",
-                    right: "",
-                  }}
-                  themeSystem="bootstrap5"
-                  events={formattedEvents}
-                  editable={true}
-                  selectable={true}
-                  selectMirror={true}
-                  dayMaxEvents={true}
-                  weekends={true}
-                  height="auto"
-                  locale="pt-br"
-                  timeZone="local"
-                  dateClick={handleDateClick}
-                  eventClick={handleEventClick}
-                  eventDrop={handleEventDrop}
-                  eventTimeFormat={{
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    meridiem: false,
-                    hour12: false,
-                  }}
-                  slotMinTime="07:00:00"
-                  slotMaxTime="20:00:00"
-                  slotDuration="00:15:00"
-                  allDaySlot={false}
-                  nowIndicator={true}
-                  businessHours={{
-                    daysOfWeek: [1, 2, 3, 4, 5],
-                    startTime: "08:00",
-                    endTime: "18:00",
-                  }}
-                  eventContent={renderEventContent}
-                />
+                {searchText.trim() !== "" && filteredEvents.length === 0 ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: "100%",
+                      height: "100%",
+                      fontSize: "18px",
+                      color: "#999",
+                    }}
+                  >
+                    <div style={{ textAlign: "center" }}>
+                      <i
+                        className="pi pi-search"
+                        style={{
+                          fontSize: "48px",
+                          marginBottom: "16px",
+                          display: "block",
+                        }}
+                      ></i>
+                      <p style={{ margin: "0 0 8px 0" }}>
+                        Nenhum compromisso encontrado
+                      </p>
+                      <small style={{ color: "#bbb" }}>
+                        Tente ajustar sua busca
+                      </small>
+                    </div>
+                  </div>
+                ) : (
+                  <FullCalendar
+                    ref={calendarRef}
+                    plugins={[
+                      dayGridPlugin,
+                      timeGridPlugin,
+                      interactionPlugin,
+                      bootstrap5Plugin,
+                      listPlugin,
+                    ]}
+                    initialView="dayGridMonth"
+                    headerToolbar={{
+                      left: "prev,next today",
+                      center: "title",
+                      right: "",
+                    }}
+                    themeSystem="bootstrap5"
+                    events={filteredEvents}
+                    editable={true}
+                    selectable={true}
+                    selectMirror={true}
+                    dayMaxEvents={true}
+                    weekends={true}
+                    height="auto"
+                    locale="pt-br"
+                    timeZone="local"
+                    dateClick={handleDateClick}
+                    eventClick={handleEventClick}
+                    eventDrop={handleEventDrop}
+                    eventTimeFormat={{
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      meridiem: false,
+                      hour12: false,
+                    }}
+                    slotMinTime="07:00:00"
+                    slotMaxTime="20:00:00"
+                    slotDuration="00:15:00"
+                    allDaySlot={false}
+                    nowIndicator={true}
+                    businessHours={{
+                      daysOfWeek: [1, 2, 3, 4, 5],
+                      startTime: "08:00",
+                      endTime: "18:00",
+                    }}
+                    eventContent={renderEventContent}
+                  />
+                )}
               </div>
             </div>
           </div>

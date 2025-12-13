@@ -106,6 +106,7 @@ export const formatarEventosComDuracao = (agendamentos) => {
       extendedProps: {
         descricao: evento.descricao || '',
         tipo: evento.tipoServicoId || evento.tipo || 'outro',
+        tipoServicoId: evento.tipoServicoId || evento.tipo || null,
         clienteId: evento.clienteId || null,
         duracao: duracao,
         tipoServico: tipoServico
@@ -115,16 +116,14 @@ export const formatarEventosComDuracao = (agendamentos) => {
       textColor: '#FFFFFF'
     };
 
-    // Se o evento tem display: 'none', adicionar ao objeto
     if (evento.display === 'none') {
       eventObject.display = 'none';
     }
 
-    // Preservar className se fornecido (ex: 'evento-duplicado')
+
     if (evento.className) {
       eventObject.className = evento.className;
 
-      // Se for evento duplicado, ajustar cores para manter texto legível
       if (typeof evento.className === 'string' && evento.className.indexOf('evento-duplicado') !== -1) {
         eventObject.backgroundColor = 'transparent';
         eventObject.borderColor = 'transparent';

@@ -1,9 +1,9 @@
 body {
-  font-family: "Segoe UI", Arial, sans-serif;
+  font-family: 'Segoe UI', Arial, sans-serif;
   min-height: 100vh;
   margin: 0;
   padding: 0;
-  background: #bfbacd;
+  background: #BFBACD;
   box-sizing: border-box;
 }
 
@@ -29,6 +29,20 @@ body {
   justify-content: space-between;
   align-items: center;
   width: 100%;
+}
+
+.search-container {
+  min-width: 180px;
+  max-width: 420px;
+  display: block;
+}
+
+.search-container .p-inputtext {
+  width: 220px;
+  background: #fff;
+  border: 1px solid #dcdde1;
+  padding: 6px 10px;
+  border-radius: 6px;
 }
 
 .relatorio-link {
@@ -200,21 +214,20 @@ button:hover {
   background-color: #305a8c;
 }
 
-/* Estilo específico para o popup de confirmação de exclusão */
+
 .popup {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); /* Overlay mais escuro para destacar */
+  background-color: rgba(0, 0, 0, 0.7); 
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999 !important; /* Valor extremamente alto para garantir prioridade */
+  z-index: 9999 !important; 
 }
 
-/* Conteúdo do popup de exclusão */
 .popup-content {
   background: #fff;
   padding: 25px;
@@ -223,13 +236,12 @@ button:hover {
   max-width: 450px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   position: relative;
-  z-index: 10000 !important; /* Ainda maior que o overlay */
+  z-index: 10000 !important; 
   text-align: center;
-  border-top: 4px solid #ff5252; /* Borda vermelha para alertar sobre exclusão */
-  animation: popup-appear 0.3s ease-out; /* Animação sutil */
+  border-top: 4px solid #ff5252; 
+  animation: popup-appear 0.3s ease-out; 
 }
 
-/* Animação para o popup aparecer */
 @keyframes popup-appear {
   from {
     opacity: 0;
@@ -241,7 +253,6 @@ button:hover {
   }
 }
 
-/* Ajuste nos botões do popup */
 .popup-content .modal-actions {
   margin-top: 20px;
   display: flex;
@@ -250,7 +261,7 @@ button:hover {
 }
 
 .popup-content .modal-actions button:first-child {
-  background-color: #ff5252; /* Vermelho para ação de confirmar exclusão */
+  background-color: #ff5252; 
 }
 
 .popup-content .modal-actions button:first-child:hover {
@@ -263,30 +274,26 @@ button:hover {
 }
 
 .popup-content h3 {
-  color: #ff5252; /* Vermelho para título de exclusão */
+  color: #ff5252;
   margin-top: 0;
 }
 
-/* Container para o calendário avançado */
 .calendario-avancado-container {
   flex: 1;
   padding: 0 20px 20px;
+  overflow: auto;
+  height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
-  min-height: 0;
 }
 
-/* Fazer o calendário ocupar todo o espaço disponível */
 .calendario-avancado-container > div {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 0;
 }
 
-/* Corrigir os estilos do modal e popup para garantir que apareçam corretamente */
-.modal,
-.popup {
+.modal, .popup {
   position: fixed;
   top: 0;
   left: 0;
@@ -296,12 +303,10 @@ button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Aumentar para garantir que fique acima de tudo */
+  z-index: 1000;
 }
 
-/* Garantir que o conteúdo do modal seja visível */
-.modal-content,
-.popup-content {
+.modal-content, .popup-content {
   background: #fff;
   padding: 20px;
   border-radius: 8px;
@@ -309,10 +314,9 @@ button:hover {
   max-width: 500px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   position: relative;
-  z-index: 1001; /* Garantir que fique acima do overlay */
+  z-index: 1001;
 }
 
-/* Indicador de campo obrigatório */
 .form-group label[for="titulo"]:after,
 .form-group label[for="hora"]:after {
   content: " *";
@@ -320,7 +324,6 @@ button:hover {
   font-weight: bold;
 }
 
-/* Melhorar o estilo dos campos somente leitura */
 .form-group p {
   background-color: #f5f7fa;
   padding: 12px;
@@ -332,24 +335,23 @@ button:hover {
   font-weight: 500;
 }
 
-/* Estilo para textarea */
 textarea {
   min-height: 100px;
   line-height: 1.4;
   resize: vertical;
 }
 
-/* Estilo de placeholder melhorado */
 ::placeholder {
   color: #aaa;
   opacity: 1;
 }
 
-/* Estilos gerais do container do calendário */
+
+
 .advanced-calendar-container {
   display: flex;
   flex-direction: column;
-  min-height: 100%;
+  height: 100%;
   background-color: white;
   border-radius: 12px;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
@@ -358,11 +360,13 @@ textarea {
   flex: 1;
 }
 
+
 .calendar-layout {
   display: flex;
-  min-height: 100%;
+  height: 100%;
   gap: 20px;
 }
+
 
 .calendar-sidebar {
   width: 250px;
@@ -442,7 +446,6 @@ textarea {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-height: 100%;
 }
 
 .calendar-header {
@@ -481,8 +484,7 @@ textarea {
 .calendar-main {
   flex: 1;
   width: 100%;
-  display: flex;
-  overflow: hidden;
+  min-height: 600px;
 }
 
 .calendar-modal-overlay {
@@ -515,7 +517,6 @@ textarea {
   content: '' !important;
 }
 
-/* Estilos para renderer customizado de evento (dot + título) */
 .fc-event-custom {
   display: inline-flex;
   align-items: center;
@@ -700,10 +701,10 @@ textarea {
 
 .floating-action-button {
   position: fixed !important;
-  bottom: 80px !important;
+  bottom: 80px !important; 
   right: 30px !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
-  z-index: 1001 !important;
+  z-index: 1001 !important; 
   transition: all 0.3s ease !important;
 }
 
@@ -712,9 +713,10 @@ textarea {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3) !important;
 }
 
+
 .floating-action-button {
   position: fixed !important;
-  bottom: 80px !important;
+  bottom: 80px !important; 
   right: 30px !important;
   z-index: 1001 !important;
   padding: 1rem !important;
@@ -748,27 +750,28 @@ textarea {
   width: 100%;
 }
 
+
 @media (max-width: 960px) {
   .calendar-layout {
     flex-direction: column;
   }
-
+  
   .calendar-sidebar {
     width: 100%;
     flex-direction: row;
     flex-wrap: wrap;
   }
-
+  
   .calendar-sidebar-section {
     flex: 1;
     min-width: 200px;
   }
-
+  
   .floating-action-button {
     bottom: 80px !important;
     right: 20px !important;
   }
-
+  
   .floating-action-button .p-button-label {
     display: none !important;
   }
@@ -779,29 +782,29 @@ textarea {
     flex-direction: column;
     gap: 8px;
   }
-
+  
   .calendar-modal {
     width: 95%;
   }
-
+  
   .view-button {
     padding: 6px 12px;
     font-size: 0.9rem;
   }
-
+  
   .fc .fc-toolbar {
     flex-direction: column;
     gap: 12px;
   }
-
+  
   .calendar-sidebar {
     flex-direction: column;
   }
-
+  
   .calendar-sidebar-section {
     width: 100%;
   }
-
+  
   .calendar-view-options {
     flex-wrap: wrap;
   }
@@ -811,11 +814,11 @@ textarea {
     overflow: hidden;
     padding: 0;
   }
-
+  
   .fab-icon {
     margin-right: 0;
   }
-
+  
   .fab-text {
     display: none;
   }
