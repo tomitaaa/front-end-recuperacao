@@ -563,51 +563,82 @@ function Agendamento() {
               </div>
 
               <div className="calendar-main">
-                <FullCalendar
-                  ref={calendarRef}
-                  plugins={[
-                    dayGridPlugin,
-                    timeGridPlugin,
-                    interactionPlugin,
-                    bootstrap5Plugin,
-                    listPlugin,
-                  ]}
-                  initialView="dayGridMonth"
-                  headerToolbar={{
-                    left: "prev,next today",
-                    center: "title",
-                    right: "",
-                  }}
-                  themeSystem="bootstrap5"
-                  events={filteredEvents}
-                  editable={true}
-                  selectable={true}
-                  selectMirror={true}
-                  dayMaxEvents={true}
-                  weekends={true}
-                  height="auto"
-                  locale="pt-br"
-                  timeZone="local"
-                  dateClick={handleDateClick}
-                  eventClick={handleEventClick}
-                  eventDrop={handleEventDrop}
-                  eventTimeFormat={{
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    meridiem: false,
-                    hour12: false,
-                  }}
-                  slotMinTime="07:00:00"
-                  slotMaxTime="20:00:00"
-                  slotDuration="00:15:00"
-                  allDaySlot={false}
-                  nowIndicator={true}
-                  businessHours={{
-                    daysOfWeek: [1, 2, 3, 4, 5],
-                    startTime: "08:00",
-                    endTime: "18:00",
-                  }}
-                />
+                {searchText.trim() !== "" && filteredEvents.length === 0 ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: "100%",
+                      height: "100%",
+                      fontSize: "18px",
+                      color: "#999",
+                    }}
+                  >
+                    <div style={{ textAlign: "center" }}>
+                      <i
+                        className="pi pi-search"
+                        style={{
+                          fontSize: "48px",
+                          marginBottom: "16px",
+                          display: "block",
+                        }}
+                      ></i>
+                      <p style={{ margin: "0 0 8px 0" }}>
+                        Nenhum compromisso encontrado
+                      </p>
+                      <small style={{ color: "#bbb" }}>
+                        Tente ajustar sua busca
+                      </small>
+                    </div>
+                  </div>
+                ) : (
+                  <FullCalendar
+                    ref={calendarRef}
+                    plugins={[
+                      dayGridPlugin,
+                      timeGridPlugin,
+                      interactionPlugin,
+                      bootstrap5Plugin,
+                      listPlugin,
+                    ]}
+                    initialView="dayGridMonth"
+                    headerToolbar={{
+                      left: "prev,next today",
+                      center: "title",
+                      right: "",
+                    }}
+                    themeSystem="bootstrap5"
+                    events={filteredEvents}
+                    editable={true}
+                    selectable={true}
+                    selectMirror={true}
+                    dayMaxEvents={true}
+                    weekends={true}
+                    height="auto"
+                    locale="pt-br"
+                    timeZone="local"
+                    dateClick={handleDateClick}
+                    eventClick={handleEventClick}
+                    eventDrop={handleEventDrop}
+                    eventTimeFormat={{
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      meridiem: false,
+                      hour12: false,
+                    }}
+                    slotMinTime="07:00:00"
+                    slotMaxTime="20:00:00"
+                    slotDuration="00:15:00"
+                    allDaySlot={false}
+                    nowIndicator={true}
+                    businessHours={{
+                      daysOfWeek: [1, 2, 3, 4, 5],
+                      startTime: "08:00",
+                      endTime: "18:00",
+                    }}
+                  />
+                )}
               </div>
             </div>
           </div>
