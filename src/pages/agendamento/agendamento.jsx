@@ -60,6 +60,10 @@ function Agendamento() {
   });
   const [duplicateDialogVisible, setDuplicateDialogVisible] = useState(false);
   const [duplicateDate, setDuplicateDate] = useState(null);
+  const [duplicateTime, setDuplicateTime] = useState("");
+  const [weekendConfirmVisible, setWeekendConfirmVisible] = useState(false);
+  const [pendingEventData, setPendingEventData] = useState(null);
+  const [pendingDuplicateData, setPendingDuplicateData] = useState(null);
 
   useEffect(() => {
     carregarDados();
@@ -67,19 +71,14 @@ function Agendamento() {
 
   const carregarDados = () => {
     try {
-      // Carregar clientes usando a API
       const clientesCarregados = clientesApi.getAll();
       setClients(clientesCarregados);
 
-      // Carregar tipos de serviço
       const tiposServicoCarregados = servicosApi.getAll();
       setTiposServico(tiposServicoCarregados);
 
-      // Carregar agendamentos usando a API
       const agendamentosCarregados = agendamentosApi.getAll();
       setAgendamentos(agendamentosCarregados);
-
-      console.log("Tipos de serviço carregados:", tiposServicoCarregados);
     } catch (error) {
       console.error("Erro ao carregar dados:", error);
       toast.current.show({
@@ -103,14 +102,12 @@ function Agendamento() {
       Math.floor(clickDate.getMinutes() / 15) * 15
     ).padStart(2, "0");
 
-    // Verificar se o tipo de serviço existe e usar em minúsculas
     const tipoServicoChave = "outro";
     const serviceDuration =
       (TIPOS_SERVICO[tipoServicoChave] &&
         TIPOS_SERVICO[tipoServicoChave].duration) ||
       60;
 
-    // Encontrar um serviço padrão para novo agendamento
     const servicoPadrao = tiposServico.length > 0 ? tiposServico[0] : null;
 
     setEventForm({
@@ -149,14 +146,10 @@ function Agendamento() {
 
     setSelectedClientId(clienteId);
 
-    // Garantir que o tipo seja em minúsculas
     const tipoEvento = (event.extendedProps.tipo || "outro").toLowerCase();
-
-    // Encontrar o agendamento completo para obter todas as informações
     const agendamentoCompleto = agendamentos.find((a) => a.id === event.id);
     const tipoServicoId = agendamentoCompleto?.tipoServicoId;
 
-    // Buscar informação de valor do serviço
     let valor = 0;
     if (tipoServicoId) {
       const servico = tiposServico.find((s) => s.id === tipoServicoId);
@@ -197,11 +190,7 @@ function Agendamento() {
     const day = String(startDate.getDate()).padStart(2, "0");
     const hours = String(startDate.getHours()).padStart(2, "0");
     const minutes = String(startDate.getMinutes()).padStart(2, "0");
-
-    // Garantir que o tipo seja em minúsculas
     const tipoEvento = (event.extendedProps.tipo || "outro").toLowerCase();
-
-    // Encontrar o agendamento completo para preservar todas as informações
     const agendamentoOriginal = agendamentos.find((a) => a.id === event.id);
 
     const updatedEvent = {
@@ -214,12 +203,30 @@ function Agendamento() {
       descricao: event.extendedProps.descricao || "",
       tipo: tipoEvento,
       clienteId: event.extendedProps.clienteId || null,
-      // Preservar o tipoServicoId e valor do agendamento original
       tipoServicoId: agendamentoOriginal?.tipoServicoId,
       valor: agendamentoOriginal?.valor,
     };
 
     handleEventUpdate(updatedEvent);
+  };
+
+  const renderEventContent = (eventInfo) => {
+    const tipoServico = eventInfo.event.extendedProps?.tipoServico;
+    const color =
+      (tipoServico && tipoServico.color) ||
+      eventInfo.event.backgroundColor ||
+      "#673AB7";
+    const timeText = eventInfo.timeText || "";
+
+    return (
+      <div className="fc-event-custom" title={eventInfo.event.title}>
+        <span className="fc-event-dot" style={{ backgroundColor: color }} />
+        <span className="fc-event-title-text">
+          {timeText ? `${timeText} ` : ""}
+          {eventInfo.event.title}
+        </span>
+      </div>
+    );
   };
 
   const handleFormChange = (e) => {
@@ -233,7 +240,6 @@ function Agendamento() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Encontrar o tipo de serviço selecionado para obter o valor
     let valor = eventForm.valor;
     if (eventForm.tipoServicoId) {
       const servico = tiposServico.find(
@@ -250,7 +256,34 @@ function Agendamento() {
       valor: valor,
     };
 
-    console.log("Dados do evento a serem salvos:", eventData);
+    if (isNewEvent) {
+      const temConflito = agendamentos.some((agendamento) => {
+        return (
+          agendamento.data === eventData.data &&
+          agendamento.hora === eventData.hora
+        );
+      });
+
+      if (temConflito) {
+        toast.current.show({
+          severity: "error",
+          summary: "Conflito no horário",
+          detail:
+            "Já existe um agendamento para esta data e hora. Altere a data ou hora.",
+          life: 4000,
+        });
+        return;
+      }
+    }
+
+    if (isNewEvent && isWeekend(eventData.data)) {
+      setPendingEventData({
+        ...eventData,
+        id: uuidv4(),
+      });
+      setWeekendConfirmVisible(true);
+      return;
+    }
 
     if (isNewEvent) {
       const newEvent = {
@@ -308,19 +341,15 @@ function Agendamento() {
 
   const handleEventCreate = (newEvent) => {
     try {
-      // Usar a API para adicionar o agendamento
       const agendamentoCriado = agendamentosApi.add(newEvent);
 
-      // Criar lembrete por e-mail para o agendamento
       const lembreteCriado = criarLembreteParaAgendamento(agendamentoCriado);
 
-      // Atualizar o estado local após criação bem-sucedida
       setAgendamentos((prevAgendamentos) => [
         ...prevAgendamentos,
         agendamentoCriado,
       ]);
 
-      // Mensagem de sucesso com informação sobre lembrete
       let mensagemDetalhada = "Agendamento criado com sucesso!";
       if (lembreteCriado) {
         mensagemDetalhada += " Lembrete por e-mail agendado para 24h antes.";
@@ -345,14 +374,11 @@ function Agendamento() {
 
   const handleEventUpdate = (updatedEvent) => {
     try {
-      // Usar a API para atualizar o agendamento
       const agendamentoAtualizado = agendamentosApi.update(updatedEvent);
 
       if (agendamentoAtualizado) {
-        // Atualizar lembrete para o agendamento modificado
         atualizarLembreteAgendamento(updatedEvent);
 
-        // Atualizar o estado local após atualização bem-sucedida
         setAgendamentos((prevAgendamentos) =>
           prevAgendamentos.map((agendamento) =>
             agendamento.id === updatedEvent.id ? updatedEvent : agendamento
@@ -392,14 +418,10 @@ function Agendamento() {
 
   const handleConfirmDelete = () => {
     if (eventIdToDelete) {
-      // Usar a API para excluir o agendamento
       const sucesso = agendamentosApi.delete(eventIdToDelete);
 
       if (sucesso) {
-        // Remover lembretes associados ao agendamento
         removerLembretesAgendamento(eventIdToDelete);
-
-        // Atualizar o estado local após exclusão bem-sucedida
         setAgendamentos((prev) =>
           prev.filter((item) => item.id !== eventIdToDelete)
         );
@@ -429,6 +451,38 @@ function Agendamento() {
     setEventIdToDelete(null);
   };
 
+  const isWeekend = (date) => {
+    const d = new Date(date);
+    const day = d.getDay();
+    return day === 0 || day === 6;
+  };
+
+  const handleWeekendConfirm = () => {
+    if (pendingEventData) {
+      handleEventCreate(pendingEventData);
+      setPendingEventData(null);
+    } else if (pendingDuplicateData) {
+      handleEventCreate(pendingDuplicateData.newEvent);
+      setDuplicateDialogVisible(false);
+      setDuplicateDate(null);
+      setDuplicateTime("");
+      setPendingDuplicateData(null);
+      toast.current.show({
+        severity: "success",
+        summary: "Duplicado",
+        detail: "Agendamento duplicado com sucesso",
+        life: 3000,
+      });
+    }
+    setWeekendConfirmVisible(false);
+  };
+
+  const handleWeekendCancel = () => {
+    setWeekendConfirmVisible(false);
+    setPendingEventData(null);
+    setPendingDuplicateData(null);
+  };
+
   const formatDateToYMD = (date) => {
     const d = new Date(date);
     const year = d.getUTCFullYear();
@@ -443,8 +497,10 @@ function Agendamento() {
       const dateObj = new Date(`${partes[0]}-${partes[1]}-${partes[2]}`);
       dateObj.setDate(dateObj.getDate() + 1);
       setDuplicateDate(dateObj);
+      setDuplicateTime(eventForm.hora || "");
     } else {
       setDuplicateDate(new Date());
+      setDuplicateTime("");
     }
     setDuplicateDialogVisible(true);
   };
@@ -460,36 +516,41 @@ function Agendamento() {
       return;
     }
 
-    const selectedD = new Date(duplicateDate);
-    const selectedYear = selectedD.getFullYear();
-    const selectedMonth = selectedD.getMonth();
-    const selectedDay = selectedD.getDate();
+    const timeParts = (duplicateTime || "").split(":");
+    const hours = parseInt(timeParts[0] || "0", 10);
+    const minutes = parseInt(timeParts[1] || "0", 10);
 
-    const today = new Date();
-    const todayYear = today.getFullYear();
-    const todayMonth = today.getMonth();
-    const todayDay = today.getDate();
+    const selectedDT = new Date(duplicateDate);
+    selectedDT.setHours(hours, minutes, 0, 0);
 
-    const isRetroactive =
-      selectedYear < todayYear ||
-      (selectedYear === todayYear && selectedMonth < todayMonth) ||
-      (selectedYear === todayYear &&
-        selectedMonth === todayMonth &&
-        selectedDay < todayDay);
+    const now = new Date();
 
-    console.log(
-      "Data selecionada:",
-      `${selectedYear}-${selectedMonth + 1}-${selectedDay}`
-    );
-    console.log("Data de hoje:", `${todayYear}-${todayMonth + 1}-${todayDay}`);
-    console.log("É retroativa?", isRetroactive);
-
-    if (isRetroactive) {
+    if (selectedDT < now) {
       toast.current.show({
         severity: "error",
         summary: "Conflito no horário",
         detail:
-          "Não é possível duplicar para uma data retroativa — altere a data ou hora.",
+          "Não é possível duplicar para data/hora retroativa — altere a data ou hora.",
+        life: 4000,
+      });
+      return;
+    }
+    const selectedDateStr = formatDateToYMD(duplicateDate);
+    const selectedHora = duplicateTime || eventForm.hora;
+
+    const temConflito = agendamentos.some((agendamento) => {
+      if (agendamento.id === eventForm.id) return false;
+      return (
+        agendamento.data === selectedDateStr &&
+        agendamento.hora === selectedHora
+      );
+    });
+
+    if (temConflito) {
+      toast.current.show({
+        severity: "error",
+        summary: "Conflito no horário",
+        detail: "Conflito no horário — altere a data ou hora.",
         life: 4000,
       });
       return;
@@ -499,13 +560,22 @@ function Agendamento() {
       ...eventForm,
       id: uuidv4(),
       data: formatDateToYMD(duplicateDate),
+      hora: duplicateTime || eventForm.hora,
       clienteId: selectedClientId,
+      className: "evento-duplicado",
     };
+
+    if (isWeekend(duplicateDate)) {
+      setPendingDuplicateData({ newEvent });
+      setWeekendConfirmVisible(true);
+      return;
+    }
 
     handleEventCreate(newEvent);
 
     setDuplicateDialogVisible(false);
     setDuplicateDate(null);
+    setDuplicateTime("");
 
     toast.current.show({
       severity: "success",
@@ -659,6 +729,7 @@ function Agendamento() {
                     startTime: "08:00",
                     endTime: "18:00",
                   }}
+                  eventContent={renderEventContent}
                 />
               </div>
             </div>
@@ -666,7 +737,6 @@ function Agendamento() {
         </div>
       </div>
 
-      {/* Modal para criar/editar agendamentos */}
       <Dialog
         header={isNewEvent ? "Criar Agendamento" : "Editar Agendamento"}
         visible={isModalOpen}
@@ -740,12 +810,10 @@ function Agendamento() {
                 if (servicoSelecionado) {
                   const duracaoPadrao = servicoSelecionado.duracao || 60;
                   const valorServico = servicoSelecionado.valor || 0;
-                  const corServico = servicoSelecionado.cor || "673AB7";
-
                   setEventForm((prev) => ({
                     ...prev,
                     tipoServicoId: servicoSelecionado.id,
-                    tipo: servicoSelecionado.id, // Manter compatibilidade
+                    tipo: servicoSelecionado.id,
                     duracao: duracaoPadrao,
                     valor: valorServico,
                   }));
@@ -895,7 +963,6 @@ function Agendamento() {
         </div>
       </Dialog>
 
-      {/* Dialog para selecionar nova data e duplicar o agendamento */}
       <Dialog
         header="Duplicar Agendamento"
         visible={duplicateDialogVisible}
@@ -921,7 +988,7 @@ function Agendamento() {
               icon="pi pi-clone"
               className="p-button-primary"
               onClick={handleConfirmDuplicate}
-              disabled={!duplicateDate}
+              disabled={!duplicateDate || !duplicateTime}
             />
           </div>
         }
@@ -936,6 +1003,51 @@ function Agendamento() {
               showIcon
             />
           </div>
+          <div className="p-col-12 p-field">
+            <label htmlFor="duplicateHora">Hora *</label>
+            <InputText
+              id="duplicateHora"
+              type="time"
+              value={duplicateTime}
+              onChange={(e) => setDuplicateTime(e.target.value)}
+              required
+              step="900"
+            />
+          </div>
+        </div>
+      </Dialog>
+
+      <Dialog
+        header="Agendamento em Final de Semana"
+        visible={weekendConfirmVisible}
+        style={{ width: "450px" }}
+        modal
+        footer={
+          <div className="p-d-flex p-jc-end">
+            <Button
+              label="Cancelar"
+              icon="pi pi-times"
+              className="p-button-text p-mr-2"
+              onClick={handleWeekendCancel}
+            />
+            <Button
+              label="Confirmar"
+              icon="pi pi-check"
+              className="p-button-primary"
+              onClick={handleWeekendConfirm}
+            />
+          </div>
+        }
+        onHide={handleWeekendCancel}
+      >
+        <div className="p-d-flex p-ai-center p-jc-center">
+          <i
+            className="pi pi-exclamation-circle p-mr-3"
+            style={{ fontSize: "2rem", color: "#ff9800" }}
+          />
+          <span>
+            A data selecionada é um sábado ou domingo. Deseja continuar?
+          </span>
         </div>
       </Dialog>
 

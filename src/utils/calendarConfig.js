@@ -98,7 +98,7 @@ export const formatarEventosComDuracao = (agendamentos) => {
     
     const duracao = evento.duracao || tipoServico.duration || 60;
     
-    return {
+    const eventObject = {
       id: evento.id,
       title: evento.titulo,
       start: `${evento.data}T${evento.hora}`,
@@ -114,6 +114,25 @@ export const formatarEventosComDuracao = (agendamentos) => {
       borderColor: tipoServico.color,
       textColor: '#FFFFFF'
     };
+
+    // Se o evento tem display: 'none', adicionar ao objeto
+    if (evento.display === 'none') {
+      eventObject.display = 'none';
+    }
+
+    // Preservar className se fornecido (ex: 'evento-duplicado')
+    if (evento.className) {
+      eventObject.className = evento.className;
+
+      // Se for evento duplicado, ajustar cores para manter texto legível
+      if (typeof evento.className === 'string' && evento.className.indexOf('evento-duplicado') !== -1) {
+        eventObject.backgroundColor = 'transparent';
+        eventObject.borderColor = 'transparent';
+        eventObject.textColor = '#000000';
+      }
+    }
+
+    return eventObject;
   });
 };
 
