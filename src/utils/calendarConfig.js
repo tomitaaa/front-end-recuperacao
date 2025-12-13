@@ -98,7 +98,7 @@ export const formatarEventosComDuracao = (agendamentos) => {
     
     const duracao = evento.duracao || tipoServico.duration || 60;
     
-    return {
+    const eventObject = {
       id: evento.id,
       title: evento.titulo,
       start: `${evento.data}T${evento.hora}`,
@@ -106,6 +106,7 @@ export const formatarEventosComDuracao = (agendamentos) => {
       extendedProps: {
         descricao: evento.descricao || '',
         tipo: evento.tipoServicoId || evento.tipo || 'outro',
+        tipoServicoId: evento.tipoServicoId || evento.tipo || null,
         clienteId: evento.clienteId || null,
         duracao: duracao,
         tipoServico: tipoServico
@@ -114,6 +115,23 @@ export const formatarEventosComDuracao = (agendamentos) => {
       borderColor: tipoServico.color,
       textColor: '#FFFFFF'
     };
+
+    if (evento.display === 'none') {
+      eventObject.display = 'none';
+    }
+
+
+    if (evento.className) {
+      eventObject.className = evento.className;
+
+      if (typeof evento.className === 'string' && evento.className.indexOf('evento-duplicado') !== -1) {
+        eventObject.backgroundColor = 'transparent';
+        eventObject.borderColor = 'transparent';
+        eventObject.textColor = '#000000';
+      }
+    }
+
+    return eventObject;
   });
 };
 
