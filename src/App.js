@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import "./App.css";
 import Header from "./components/header/header";
-import Calculadora from "./pages/calculadora/calculadora";
 import Home from "./pages/home/home";
 import Footer from "./components/footer/footer";
 import CadastroUsuario from "./pages/cadastroUsuario/cadastroUsuario";
@@ -66,7 +65,6 @@ function App() {
           
           {/* Rotas com Header */}
           <Route path="/home" element={<><Header nome="Organize Agenda" /><Home /></>} />
-          <Route path="/calculadora" element={<><Header nome="Organize Agenda" /><Calculadora /></>} />
           <Route path="/agendamento" element={<><Header nome="Organize Agenda" /><Agendamento /></>} />
           <Route path="/servicos" element={<><Header nome="Organize Agenda" /><GerenciarServicos /></>} />
           <Route path="/clientes" element={<><Header nome="Organize Agenda" /><GerenciarClientes /></>} />
