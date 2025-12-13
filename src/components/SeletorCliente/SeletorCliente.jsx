@@ -7,7 +7,6 @@ import React, {
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
-import { AutoComplete } from "primereact/autocomplete";
 import { clientesApi } from "../../utils/localStorageApi";
 import "./SeletorCliente.css";
 
@@ -30,7 +29,6 @@ const SeletorCliente = forwardRef(
     const [clienteDialogVisivel, setClienteDialogVisivel] = useState(false);
     const [selecionarDialogVisivel, setSelecionarDialogVisivel] =
       useState(false);
-    const [filteredClientes, setFilteredClientes] = useState([]);
     const [novoCliente, setNovoCliente] = useState({
       nome: "",
       telefone: "",
@@ -74,16 +72,6 @@ const SeletorCliente = forwardRef(
       } catch (error) {
         console.error("Erro ao carregar clientes:", error);
         setClientes([]);
-      }
-    };
-
-    const handleClienteChange = (e) => {
-      setClienteSelecionado(e.value);
-      if (onChange) {
-        onChange(e.value ? e.value.id : null);
-      }
-      if (onClientSelect) {
-        onClientSelect(e.value ? e.value.id : null);
       }
     };
 
@@ -157,41 +145,6 @@ const SeletorCliente = forwardRef(
       setClienteDialogVisivel(false);
     };
 
-    const buscarClientes = (event) => {
-      setBusca(event.query);
-      let _filteredClientes;
-
-      if (!event.query.trim().length) {
-        _filteredClientes = [...clientes];
-      } else {
-        const termo = event.query.toLowerCase();
-        _filteredClientes = clientes.filter((cliente) => {
-          return (
-            cliente.nome.toLowerCase().includes(termo) ||
-            cliente.telefone.includes(termo) ||
-            (cliente.email && cliente.email.toLowerCase().includes(termo)) ||
-            (cliente.documentos?.cpf && cliente.documentos.cpf.includes(termo))
-          );
-        });
-      }
-
-      setFilteredClientes(_filteredClientes);
-    };
-
-    const clienteItemTemplate = (cliente) => {
-      return (
-        <div className="cliente-item">
-          <div>
-            <span className="cliente-item-nome">{cliente.nome}</span>
-            <span className="cliente-item-telefone">{cliente.telefone}</span>
-          </div>
-          {cliente.email && (
-            <div className="cliente-item-email">{cliente.email}</div>
-          )}
-        </div>
-      );
-    };
-
     const clienteDialogFooter = (
       <React.Fragment>
         <Button
@@ -232,37 +185,35 @@ const SeletorCliente = forwardRef(
     return (
       <div className="seletor-cliente">
         <div className="p-field p-fluid">
-          <div className="p-inputgroup">
-            <AutoComplete
-              dropdown
-              value={clienteSelecionado}
-              suggestions={filteredClientes}
-              completeMethod={buscarClientes}
-              field="nome"
-              itemTemplate={clienteItemTemplate}
-              onChange={handleClienteChange}
-              placeholder="Buscar cliente..."
-              className={required ? "p-invalid" : ""}
-              aria-required={required}
-            />
-            {showNewButton && (
+          {clienteSelecionado ? (
+            <div className="cliente-selecionado-display">
+              <div className="cliente-info">
+                <strong>{clienteSelecionado.nome}</strong>
+                <small>{clienteSelecionado.telefone}</small>
+              </div>
               <Button
-                icon="pi pi-plus"
-                className="p-button-success"
-                onClick={abrirNovoDialog}
-                tooltip="Novo cliente"
+                icon="pi pi-times"
+                className="p-button-text p-button-sm"
+                onClick={() => {
+                  setClienteSelecionado(null);
+                  if (onChange) onChange(null);
+                  if (onClientSelect) onClientSelect(null);
+                }}
+                tooltip="Remover cliente"
               />
-            )}
+            </div>
+          ) : (
             <Button
-              icon="pi pi-list"
-              className="p-button-secondary p-ml-2"
+              label="Selecionar Cliente"
+              icon="pi pi-user"
+              className="p-button-outlined"
               onClick={() => {
                 carregarClientes();
                 setSelecionarDialogVisivel(true);
               }}
-              tooltip="Selecionar cliente"
+              style={{ width: "100%" }}
             />
-          </div>
+          )}
         </div>
 
         {showDialog && (
@@ -327,57 +278,23 @@ const SeletorCliente = forwardRef(
               <InputText
                 placeholder="Buscar por nome, telefone ou CPF"
                 value={busca}
-                onChange={(e) => {
-                  setBusca(e.target.value);
-                  const termo = e.target.value.toLowerCase();
-                  setFilteredClientes(
-                    clientes.filter(
-                      (c) =>
-                        (c.nome || "").toLowerCase().includes(termo) ||
-                        (c.telefone || "").includes(termo) ||
-                        (c.documentos?.cpf || "").includes(termo)
-                    )
-                  );
-                }}
+                onChange={(e) => setBusca(e.target.value)}
               />
             </div>
 
             <div className="lista-clientes">
-              {filteredClientes.length === 0 && clientes.length === 0 && (
-                <div>Nenhum cliente cadastrado.</div>
-              )}
-              {filteredClientes.length === 0 &&
-                clientes.length > 0 &&
-                clientes.map((cliente) => (
-                  <div
-                    key={cliente.id}
-                    className="linha-cliente p-d-flex p-jc-between p-ai-center p-py-2"
-                  >
-                    <div>
-                      <div className="cliente-nome">{cliente.nome}</div>
-                      <div className="cliente-info">
-                        {cliente.telefone}{" "}
-                        {cliente.email && `• ${cliente.email}`}
-                      </div>
-                    </div>
-                    <div>
-                      <Button
-                        label="Selecionar"
-                        icon="pi pi-check"
-                        className="p-button-sm"
-                        onClick={() => {
-                          setClienteSelecionado(cliente);
-                          if (onChange) onChange(cliente.id);
-                          if (onClientSelect) onClientSelect(cliente.id);
-                          setSelecionarDialogVisivel(false);
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))}
-
-              {filteredClientes.length > 0 &&
-                filteredClientes.map((cliente) => (
+              {clientes.length === 0 && <div>Nenhum cliente cadastrado.</div>}
+              {clientes
+                .filter((c) => {
+                  const termo = busca.toLowerCase();
+                  if (!termo) return true;
+                  return (
+                    (c.nome || "").toLowerCase().includes(termo) ||
+                    (c.telefone || "").includes(termo) ||
+                    (c.documentos?.cpf || "").includes(termo)
+                  );
+                })
+                .map((cliente) => (
                   <div
                     key={cliente.id}
                     className="linha-cliente p-d-flex p-jc-between p-ai-center p-py-2"

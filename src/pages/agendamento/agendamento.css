@@ -26,8 +26,20 @@ body {
 
 .calendar-header-content {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
+  width: 100%;
+  margin-bottom: 15px;
+  padding-left: 0;
+}
+
+.search-field {
+  width: 100%;
+  max-width: 320px;
+  margin-left: -20px;
+}
+
+.search-field .p-inputtext {
   width: 100%;
 }
 
@@ -460,6 +472,17 @@ textarea {
   gap: 10px;
 }
 
+.calendar-today-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.calendar-today-button .p-button {
+  min-width: 120px;
+}
+
 .view-button {
   padding: 8px 16px;
   border: 1px solid #ddd;
@@ -661,6 +684,11 @@ textarea {
 .fc .fc-button-primary {
   background-color: #4078c0;
   border-color: #4078c0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 44px;
 }
 
 .fc .fc-button-primary:hover {
@@ -672,6 +700,32 @@ textarea {
 .fc .fc-button-primary:not(:disabled):active {
   background-color: #305a8c;
   border-color: #305a8c;
+}
+
+.fc .fc-prev-button::before {
+  content: "◀";
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.fc .fc-next-button::before {
+  content: "▶";
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.fc .fc-today-button::before {
+  content: "📅 ";
+  font-size: 0.85rem;
+}
+
+.fc .fc-prev-button .fc-icon,
+.fc .fc-next-button .fc-icon {
+  display: none;
+}
+
+.fc .fc-today-button .fc-icon {
+  display: none;
 }
 
 .fc .fc-daygrid-day-number {

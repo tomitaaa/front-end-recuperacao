@@ -10,7 +10,6 @@ import {
   TIPOS_SERVICO,
   formatarEventosComDuracao,
 } from "../../utils/calendarConfig";
-import SeletorCliente from "../../components/SeletorCliente/SeletorCliente";
 import {
   clientesApi,
   agendamentosApi,
@@ -329,6 +328,13 @@ function Agendamento() {
     }
   };
 
+  const goToToday = () => {
+    if (calendarRef.current) {
+      const calendarApi = calendarRef.current.getApi();
+      calendarApi.today();
+    }
+  };
+
   const isDatePassed = () => {
     if (!eventForm.data || !eventForm.hora) return false;
 
@@ -360,7 +366,6 @@ function Agendamento() {
       );
     });
   })();
-
 
   const handleEventCreate = (newEvent) => {
     try {
@@ -631,17 +636,6 @@ function Agendamento() {
         <div className="advanced-calendar-container">
           <div className="calendar-layout">
             <div className="calendar-sidebar">
-              <Card title="Cliente" className="p-mb-3">
-                <SeletorCliente
-                  ref={clienteSelectorRef}
-                  selectedClientId={selectedClientId}
-                  onClientSelect={setSelectedClientId}
-                  onClientCreated={(novoCliente) => {
-                    carregarDados();
-                  }}
-                />
-              </Card>
-
               <Card title="Tipos de Serviço">
                 <div className="lista-tipos-servico">
                   {Object.keys(TIPOS_SERVICO).map((tipo) => (
@@ -708,6 +702,14 @@ function Agendamento() {
                     onClick={() => changeView("listMonth")}
                   />
                 </div>
+                <div className="calendar-today-button">
+                  <Button
+                    label="Hoje"
+                    icon="pi pi-calendar"
+                    className="p-button-outlined p-button-sm"
+                    onClick={goToToday}
+                  />
+                </div>
                 <div className="calendar-header-content">
                   <div className="search-field">
                     <InputText
@@ -762,9 +764,9 @@ function Agendamento() {
                     ]}
                     initialView="dayGridMonth"
                     headerToolbar={{
-                      left: "prev,next today",
+                      left: "prev",
                       center: "title",
-                      right: "",
+                      right: "next",
                     }}
                     themeSystem="bootstrap5"
                     events={filteredEvents}
