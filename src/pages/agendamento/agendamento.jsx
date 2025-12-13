@@ -475,6 +475,9 @@ function Agendamento() {
                   ref={clienteSelectorRef}
                   selectedClientId={selectedClientId}
                   onClientSelect={setSelectedClientId}
+                  onClientCreated={(novoCliente) => {
+                    carregarDados();
+                  }}
                 />
               </Card>
 

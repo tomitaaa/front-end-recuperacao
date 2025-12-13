@@ -16,6 +16,7 @@ const SeletorCliente = forwardRef(
     {
       selectedClientId,
       onClientSelect,
+      onClientCreated = null,
       value = null,
       onChange = null,
       required = false,
@@ -49,7 +50,6 @@ const SeletorCliente = forwardRef(
     }));
 
     useEffect(() => {
-      // Quando o valor muda externamente (por exemplo, ao limpar formulário)
       if (value) {
         const cliente = clientes.find((cliente) => cliente.id === value);
         if (cliente) {
@@ -69,7 +69,6 @@ const SeletorCliente = forwardRef(
 
     const carregarClientes = () => {
       try {
-        // Usar a API para obter os clientes
         const clientesCarregados = clientesApi.getAll();
         setClientes(clientesCarregados);
       } catch (error) {
@@ -97,7 +96,6 @@ const SeletorCliente = forwardRef(
     };
 
     const handleCriarCliente = () => {
-      // Validações básicas
       if (!novoCliente.nome || !novoCliente.telefone) {
         return;
       }
@@ -121,13 +119,10 @@ const SeletorCliente = forwardRef(
         },
       };
 
-      // Adicionar usando a API
       clientesApi.add(cliente);
-      // Recarregar a lista de clientes
       const clientesAtualizados = clientesApi.getAll();
       setClientes(clientesAtualizados);
 
-      // Selecionar o cliente recém-criado
       setClienteSelecionado(cliente);
       if (onChange) {
         onChange(cliente.id);
@@ -135,11 +130,13 @@ const SeletorCliente = forwardRef(
       if (onClientSelect) {
         onClientSelect(cliente.id);
       }
+      if (onClientCreated) {
+        onClientCreated(cliente);
+      }
 
-      // Fechar o modal
       setClienteDialogVisivel(false);
+      setSelecionarDialogVisivel(false);
 
-      // Limpar o formulário
       setNovoCliente({
         nome: "",
         telefone: "",
@@ -160,7 +157,6 @@ const SeletorCliente = forwardRef(
       setClienteDialogVisivel(false);
     };
 
-    // AutoComplete handler
     const buscarClientes = (event) => {
       setBusca(event.query);
       let _filteredClientes;
@@ -211,6 +207,26 @@ const SeletorCliente = forwardRef(
           onClick={handleCriarCliente}
         />
       </React.Fragment>
+    );
+
+    const selecionarDialogFooter = (
+      <div className="p-d-flex p-jc-between p-ai-center">
+        <Button
+          label="Novo Cliente"
+          icon="pi pi-plus"
+          className="p-button-success p-button-sm"
+          onClick={() => {
+            setSelecionarDialogVisivel(false);
+            abrirNovoDialog();
+          }}
+        />
+        <Button
+          label="Fechar"
+          icon="pi pi-times"
+          className="p-button-text"
+          onClick={() => setSelecionarDialogVisivel(false)}
+        />
+      </div>
     );
 
     return (
@@ -303,6 +319,7 @@ const SeletorCliente = forwardRef(
           visible={selecionarDialogVisivel}
           style={{ width: "600px" }}
           modal
+          footer={selecionarDialogFooter}
           onHide={() => setSelecionarDialogVisivel(false)}
         >
           <div className="p-fluid">
