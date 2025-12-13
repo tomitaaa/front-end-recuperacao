@@ -653,6 +653,29 @@ textarea {
   transform: scale(1.02);
 }
 
+/* Estilos para o event content customizado */
+.fc-event-custom {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 2px 4px;
+}
+
+.fc-event-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.fc-event-title-text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .fc .fc-timegrid-slot {
   height: 40px;
 }
