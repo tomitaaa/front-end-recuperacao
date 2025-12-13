@@ -2,6 +2,32 @@
   width: 100%;
 }
 
+.cliente-selecionado-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+}
+
+.cliente-selecionado-display .cliente-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cliente-selecionado-display .cliente-info strong {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.cliente-selecionado-display .cliente-info small {
+  font-size: 0.85rem;
+  color: #666;
+}
+
 .cliente-option {
   display: flex;
   flex-direction: column;

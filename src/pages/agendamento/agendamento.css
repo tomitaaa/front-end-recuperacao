@@ -26,9 +26,35 @@ body {
 
 .calendar-header-content {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
+  margin-bottom: 15px;
+  padding-left: 0;
+}
+
+.search-field {
+  width: 100%;
+  max-width: 320px;
+  margin-left: -20px;
+}
+
+.search-field .p-inputtext {
+  width: 100%;
+}
+
+.search-container {
+  min-width: 180px;
+  max-width: 420px;
+  display: block;
+}
+
+.search-container .p-inputtext {
+  width: 220px;
+  background: #fff;
+  border: 1px solid #dcdde1;
+  padding: 6px 10px;
+  border-radius: 6px;
 }
 
 .relatorio-link {
@@ -200,21 +226,20 @@ button:hover {
   background-color: #305a8c;
 }
 
-/* Estilo específico para o popup de confirmação de exclusão */
+
 .popup {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); /* Overlay mais escuro para destacar */
+  background-color: rgba(0, 0, 0, 0.7); 
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999 !important; /* Valor extremamente alto para garantir prioridade */
+  z-index: 9999 !important; 
 }
 
-/* Conteúdo do popup de exclusão */
 .popup-content {
   background: #fff;
   padding: 25px;
@@ -223,13 +248,12 @@ button:hover {
   max-width: 450px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   position: relative;
-  z-index: 10000 !important; /* Ainda maior que o overlay */
+  z-index: 10000 !important; 
   text-align: center;
-  border-top: 4px solid #ff5252; /* Borda vermelha para alertar sobre exclusão */
-  animation: popup-appear 0.3s ease-out; /* Animação sutil */
+  border-top: 4px solid #ff5252; 
+  animation: popup-appear 0.3s ease-out; 
 }
 
-/* Animação para o popup aparecer */
 @keyframes popup-appear {
   from {
     opacity: 0;
@@ -241,7 +265,6 @@ button:hover {
   }
 }
 
-/* Ajuste nos botões do popup */
 .popup-content .modal-actions {
   margin-top: 20px;
   display: flex;
@@ -250,7 +273,7 @@ button:hover {
 }
 
 .popup-content .modal-actions button:first-child {
-  background-color: #ff5252; /* Vermelho para ação de confirmar exclusão */
+  background-color: #ff5252; 
 }
 
 .popup-content .modal-actions button:first-child:hover {
@@ -263,11 +286,10 @@ button:hover {
 }
 
 .popup-content h3 {
-  color: #ff5252; /* Vermelho para título de exclusão */
+  color: #ff5252;
   margin-top: 0;
 }
 
-/* Container para o calendário avançado */
 .calendario-avancado-container {
   flex: 1;
   padding: 0 20px 20px;
@@ -277,14 +299,12 @@ button:hover {
   flex-direction: column;
 }
 
-/* Fazer o calendário ocupar todo o espaço disponível */
 .calendario-avancado-container > div {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-/* Corrigir os estilos do modal e popup para garantir que apareçam corretamente */
 .modal, .popup {
   position: fixed;
   top: 0;
@@ -295,10 +315,9 @@ button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Aumentar para garantir que fique acima de tudo */
+  z-index: 1000;
 }
 
-/* Garantir que o conteúdo do modal seja visível */
 .modal-content, .popup-content {
   background: #fff;
   padding: 20px;
@@ -307,10 +326,9 @@ button:hover {
   max-width: 500px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   position: relative;
-  z-index: 1001; /* Garantir que fique acima do overlay */
+  z-index: 1001;
 }
 
-/* Indicador de campo obrigatório */
 .form-group label[for="titulo"]:after,
 .form-group label[for="hora"]:after {
   content: " *";
@@ -318,7 +336,6 @@ button:hover {
   font-weight: bold;
 }
 
-/* Melhorar o estilo dos campos somente leitura */
 .form-group p {
   background-color: #f5f7fa;
   padding: 12px;
@@ -330,14 +347,12 @@ button:hover {
   font-weight: 500;
 }
 
-/* Estilo para textarea */
 textarea {
   min-height: 100px;
   line-height: 1.4;
   resize: vertical;
 }
 
-/* Estilo de placeholder melhorado */
 ::placeholder {
   color: #aaa;
   opacity: 1;
@@ -345,7 +360,6 @@ textarea {
 
 
 
-/* Estilos gerais do container do calendário */
 .advanced-calendar-container {
   display: flex;
   flex-direction: column;
@@ -458,6 +472,17 @@ textarea {
   gap: 10px;
 }
 
+.calendar-today-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.calendar-today-button .p-button {
+  min-width: 120px;
+}
+
 .view-button {
   padding: 8px 16px;
   border: 1px solid #ddd;
@@ -496,6 +521,46 @@ textarea {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+}
+.fc .fc-event.evento-duplicado,
+.fc-event.evento-duplicado {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.fc-event.evento-duplicado .fc-event-main,
+.fc-event.evento-duplicado .fc-event-title,
+.fc-event.evento-duplicado .fc-event-time {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+.fc-event.evento-duplicado::before {
+  content: '' !important;
+}
+
+.fc-event-custom {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fc-event-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  flex: 0 0 auto;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.05) inset;
+}
+
+.fc-event-title-text {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
 }
 
 .calendar-modal {
@@ -619,6 +684,11 @@ textarea {
 .fc .fc-button-primary {
   background-color: #4078c0;
   border-color: #4078c0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 44px;
 }
 
 .fc .fc-button-primary:hover {
@@ -630,6 +700,32 @@ textarea {
 .fc .fc-button-primary:not(:disabled):active {
   background-color: #305a8c;
   border-color: #305a8c;
+}
+
+.fc .fc-prev-button::before {
+  content: "◀";
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.fc .fc-next-button::before {
+  content: "▶";
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.fc .fc-today-button::before {
+  content: "📅 ";
+  font-size: 0.85rem;
+}
+
+.fc .fc-prev-button .fc-icon,
+.fc .fc-next-button .fc-icon {
+  display: none;
+}
+
+.fc .fc-today-button .fc-icon {
+  display: none;
 }
 
 .fc .fc-daygrid-day-number {
