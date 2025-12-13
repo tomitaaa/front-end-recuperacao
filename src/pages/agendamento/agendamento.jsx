@@ -431,9 +431,9 @@ function Agendamento() {
 
   const formatDateToYMD = (date) => {
     const d = new Date(date);
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
+    const year = d.getUTCFullYear();
+    const month = String(d.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(d.getUTCDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
 
@@ -459,6 +459,42 @@ function Agendamento() {
       });
       return;
     }
+
+    const selectedD = new Date(duplicateDate);
+    const selectedYear = selectedD.getFullYear();
+    const selectedMonth = selectedD.getMonth();
+    const selectedDay = selectedD.getDate();
+
+    const today = new Date();
+    const todayYear = today.getFullYear();
+    const todayMonth = today.getMonth();
+    const todayDay = today.getDate();
+
+    const isRetroactive =
+      selectedYear < todayYear ||
+      (selectedYear === todayYear && selectedMonth < todayMonth) ||
+      (selectedYear === todayYear &&
+        selectedMonth === todayMonth &&
+        selectedDay < todayDay);
+
+    console.log(
+      "Data selecionada:",
+      `${selectedYear}-${selectedMonth + 1}-${selectedDay}`
+    );
+    console.log("Data de hoje:", `${todayYear}-${todayMonth + 1}-${todayDay}`);
+    console.log("É retroativa?", isRetroactive);
+
+    if (isRetroactive) {
+      toast.current.show({
+        severity: "error",
+        summary: "Conflito no horário",
+        detail:
+          "Não é possível duplicar para uma data retroativa — altere a data ou hora.",
+        life: 4000,
+      });
+      return;
+    }
+
     const newEvent = {
       ...eventForm,
       id: uuidv4(),
