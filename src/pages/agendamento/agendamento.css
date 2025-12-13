@@ -680,6 +680,34 @@ textarea {
   height: 40px;
 }
 
+/* Estilos para os botões de navegação prev/next */
+.fc .fc-prev-button,
+.fc .fc-next-button {
+  font-size: 1.1rem !important;
+  padding: 0.5rem 0.75rem !important;
+}
+
+.fc .fc-prev-button::before {
+  content: "◀";
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-right: 4px;
+}
+
+.fc .fc-next-button::before {
+  content: "▶";
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-right: 4px;
+}
+
+/* Campo de busca */
+.search-field {
+  width: 100%;
+  max-width: 320px;
+  margin-left: -20px;
+}
+
 .floating-action-button {
   position: fixed !important;
   bottom: 80px !important; 
