@@ -43,3 +43,24 @@ Adaptar o modal de criação para receber valores pré-preenchidos;
 Implementar validação de conflito antes de salvar.
 
 Story Point estimados: 4
+
+
+Como [USUÁRIO] quero poder [SELECIONAR UM CLIENTE ESPECÍFICO NA HORA DE AGENDAR A CONSULTA] para que assim seja [MAIS SIMPLES E MAIS RÁPIDO O CADASTRO DOS AGENDAMENTOS PARA CLIENTES JÁ CADASTRADOS NO SISTEMA].
+
+Foi identificado que no momento atual do sistema, no ato de cadastrar uma nova consulta, a opção de selecionar o cliente e vincular o mesmo nessa consulta, não está funcionando, não sendo possível selecionar os clientes.
+
+Critérios de Aceitação:
+
+
+Exibir lista de todos os clientes cadastrados;
+
+Cliente deve ser vinculado ao agendamento;
+
+Não ser possível mais de um cliente por agendamento;
+Tarefas
+
+
+Corrigir carga da lista de clientes no formulário;
+
+Permitir a inserção de um cliente no ato do agendamento.
+Story Points estimados: 3
