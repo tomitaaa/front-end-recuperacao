@@ -42,3 +42,17 @@ ainda não está completo mas boa parte está feita já
 
 os próximos passos são verificar se está tudo correto nesse bug e ver se não afetou nenhuma outra parte do sistema
 
+dia 12/12
+lembrei que tinha que atualizar esse documento então com base nos commits atualizei aqui
+hoje mexi na tarefa sobre a duplicação dos agendamentos
+foi criado o botão e está funcionando parcialmente, alguns problemas de layout após a duplicação que serão corrigidos posteriormente
+
+no momento está quase ok, mas com um bug visual na agenda após a duplicação
+
+os próximos passos são corrigir esse bug ou finalizar outra branch
+
+também foi corrigido um novo bug ao selecionar o cliente que estava quebrando o código
+
+a solução foi simplesmente inserir um " ); " que corrigiu tudo, falta de atenção
+
+os próximos passos são correções de css eu acredito, não está muito legal ainda
