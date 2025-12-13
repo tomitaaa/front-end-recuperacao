@@ -481,7 +481,19 @@ function Agendamento() {
   };
 
   const isWeekend = (date) => {
-    const d = new Date(date);
+    let d;
+
+    if (typeof date === "string") {
+      const parts = date.split("-");
+      d = new Date(
+        parseInt(parts[0]),
+        parseInt(parts[1]) - 1,
+        parseInt(parts[2])
+      );
+    } else {
+      d = date;
+    }
+
     const day = d.getDay();
     return day === 0 || day === 6;
   };
