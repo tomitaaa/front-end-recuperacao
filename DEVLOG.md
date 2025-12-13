@@ -4,7 +4,6 @@ problemas encontrados;
 solução adotada;
 próximos passos.
 
-
 dia 02/12
 feito o fork do projeto principal
 validação das hu's
@@ -56,3 +55,15 @@ também foi corrigido um novo bug ao selecionar o cliente que estava quebrando o
 a solução foi simplesmente inserir um " ); " que corrigiu tudo, falta de atenção
 
 os próximos passos são correções de css eu acredito, não está muito legal ainda
+
+dia 13/12
+
+me equivoquei nas datas e abri PR atrasado
+
+hoje foi para finalizar as HU's, algumas alterações pontuais nas 3, adicionando novas funções, corrigindo alguns bugs e removendo coisas desnecessárias
+
+até a hora de dar merge para a dev, estava tudo certo e funcionando, quando fui dar merge para a main, alguma coisa aconteceu sem eu perceber e deu conflito em tudo, e quando eu percebi tava faltando um monte de coisa quando upei na main, desesperei e comecei a fazer revert atrás de revert até conseguir recuperar o que tinha feito, mas no fim larguei mão por ter muita coisa confusa e fiz commit direto pra main, que era mais fácil de corrigir fazer merge de novo
+
+os próximos passos são atualizar esse documento e o readme e a apresentação
+
+provavelmente vou receber um D somente pelos commits e pull request's, mas tudo bem, me confundi muito forte hoje e nem percebi o que fiz errado direito, tive que reverter e refazer tudo novamente
